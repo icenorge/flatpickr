@@ -15,6 +15,15 @@
 ![dark](https://cloud.githubusercontent.com/assets/11352152/14549372/3cbc8514-028d-11e6-8daf-ec1ba01c9d7e.PNG)
 
 
+## changes in this version:
+# Changes:
+- use button for calendar dates - aria tags on span or div is not read by a screenreader and the navigation is easier with buttons.
+
+# config params changes
+- toMonthOnOpen: true : If dialog is closed and the calendar is not on the month of the current date, go to month of the curent date when open.
+- stopNoMoreDates: false : If "true" and there is a list of available dates stop navigation to next/prev month if no available dates and show a message
+- NoMoreDatesText: "No more available dates on {m} {y}" : actual message if navigation to next/prev month is trapped. m = month, y = year
+
 ## Motivation
 Almost every large SPA or project involves date and time input. Browser's native implementations of those are inconsistent and limited in functionality. Most other libraries require you to pull in heavy dependencies like jQuery, Bootstrap, and moment.js. I wanted something that was good-looking out of the box, dependency-free, powerful, and extensible.
 
