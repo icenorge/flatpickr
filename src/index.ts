@@ -1105,12 +1105,16 @@ function FlatpickrInstance(
       monthElement = self.monthsDropdownContainer;
     }
 
-    const yearInput = createNumberInput("cur-year", { tabindex: "-1" });
+    const yearInput = createNumberInput("cur-year");
 
     const yearElement = yearInput.getElementsByTagName(
       "input"
     )[0] as HTMLInputElement;
     yearElement.setAttribute("aria-label", self.l10n.yearAriaLabel);
+
+    if (!self.config.showYearSelector) {
+      yearInput.style.display = "none";
+    }
 
     if (self.config.minDate) {
       yearElement.setAttribute(
@@ -1969,19 +1973,18 @@ function FlatpickrInstance(
       e: KeyboardEvent,
       eventTarget: EventTarget | null
     ) {
-      console.log(self.yearElements);
-
       const traplist = [
         self.selectedDateElem,
         self.prevMonthNav,
         self.monthsDropdownContainer,
       ];
 
-      self.yearElements.forEach((el) => {
-        traplist.push(el);
-      });
+      if (self.config.showYearSelector) {
+        self.yearElements.forEach((el) => {
+          traplist.push(el);
+        });
+      }
       traplist.push(self.nextMonthNav);
-      console.log(traplist);
 
       let currentElIndex = getCurrentElIndex(eventTarget, traplist);
 
