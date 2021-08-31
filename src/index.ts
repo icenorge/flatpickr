@@ -351,22 +351,6 @@ function FlatpickrInstance(
   }
 
   /**
-   * Handles the year input and incrementing events
-   * @param {Event} event the keyup or increment event
-   */
-  function onYearInput(event: KeyboardEvent & IncrementEvent) {
-    const eventTarget = getEventTarget(event) as HTMLInputElement;
-    const year = parseInt(eventTarget.value) + (event.delta || 0);
-
-    if (
-      year / 1000 > 1 ||
-      (event.key === "Enter" && !/[^\d]/.test(year.toString()))
-    ) {
-      changeYear(year);
-    }
-  }
-
-  /**
    * Essentially addEventListener + tracking
    * @param {Element} element the element to addEventListener to
    * @param {String} event the event name
@@ -446,8 +430,6 @@ function FlatpickrInstance(
 
     if (self.daysContainer !== undefined) {
       bind(self.monthNav, "click", onMonthNavClick);
-
-      bind(self.monthNav, ["keyup", "increment"], onYearInput);
       bind(self.daysContainer, "click", selectDate);
     }
 
@@ -794,7 +776,7 @@ function FlatpickrInstance(
       callback();
       return true;
     }
-    if (!message) message = self.config.NoMoreDatesText;
+    if (!message) message = self.config.noMoreDatesText;
 
     const nextMonth = getNextMonthAndYear(
       self.currentMonth,
@@ -1189,16 +1171,14 @@ function FlatpickrInstance(
     self.yearElements = [];
     self.monthElements = [];
 
-    self.prevMonthNav = createElement<HTMLDivElement>(
-      "div",
+    self.prevMonthNav = createElement<HTMLButtonElement>(
+      "button",
       "flatpickr-prev-month"
     );
-    self.prevMonthNav.setAttribute("tabindex", "0");
     self.prevMonthNav.innerHTML = self.config.prevArrow;
     self.prevMonthNav.setAttribute("aria-label", "Gå til forrige måned");
 
-    self.nextMonthNav = createElement("div", "flatpickr-next-month");
-    self.nextMonthNav.setAttribute("tabindex", "0");
+    self.nextMonthNav = createElement("button", "flatpickr-next-month");
     self.nextMonthNav.innerHTML = self.config.nextArrow;
     self.nextMonthNav.setAttribute("aria-label", "Gå til neste måned");
 
