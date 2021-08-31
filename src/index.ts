@@ -796,7 +796,7 @@ function FlatpickrInstance(
     }
     if (!message) message = self.config.NoMoreDatesText;
 
-    const nextMonth = GetNextMonthAndYear(
+    const nextMonth = getNextMonthAndYear(
       self.currentMonth,
       self.currentYear,
       monthDelta,
@@ -818,7 +818,7 @@ function FlatpickrInstance(
   function hasMoreAvailableDays(delta: number, yearDelta = 0) {
     if (!self.config.enable || !self.config.stopNoMoreDates) return true;
 
-    const nextMonth = GetNextMonthAndYear(
+    const nextMonth = getNextMonthAndYear(
       self.currentMonth,
       self.currentYear,
       delta,
@@ -1407,7 +1407,7 @@ function FlatpickrInstance(
     };
   }
 
-  function GetNextMonthAndYear(
+  function getNextMonthAndYear(
     month: number,
     year: number,
     delta: number,
@@ -1442,10 +1442,10 @@ function FlatpickrInstance(
 
     self.currentMonth += delta;
 
-    ChangeToCurrentMonth();
+    changeToCurrentMonth();
   }
 
-  function ChangeToCurrentMonth() {
+  function changeToCurrentMonth() {
     if (self.currentMonth < 0 || self.currentMonth > 11) {
       self.currentYear += self.currentMonth > 11 ? 1 : -1;
       self.currentMonth = (self.currentMonth + 12) % 12;
@@ -2192,7 +2192,7 @@ function FlatpickrInstance(
       self.config.mode !== "range"
     ) {
       self.currentMonth = selectedDate.getMonth();
-      ChangeToCurrentMonth();
+      changeToCurrentMonth();
     }
   }
 
