@@ -1969,12 +1969,19 @@ function FlatpickrInstance(
       e: KeyboardEvent,
       eventTarget: EventTarget | null
     ) {
+      console.log(self.yearElements);
+
       const traplist = [
         self.selectedDateElem,
         self.prevMonthNav,
         self.monthsDropdownContainer,
-        self.nextMonthNav,
       ];
+
+      self.yearElements.forEach((el) => {
+        traplist.push(el);
+      });
+      traplist.push(self.nextMonthNav);
+      console.log(traplist);
 
       let currentElIndex = getCurrentElIndex(eventTarget, traplist);
 
