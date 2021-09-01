@@ -37,6 +37,7 @@ import {
 import { tokenRegex, monthToStr } from "./utils/formatting";
 
 import "./utils/polyfills";
+import { startTimer, stopTimer } from "./utils/timer";
 
 const DEBOUNCED_CHANGE_MS = 300;
 
@@ -772,7 +773,6 @@ function FlatpickrInstance(
     message = ""
   ): Boolean {
     if (hasMoreAvailableDays(monthDelta, yearDelta)) {
-      updateMessageContainer("");
       callback();
       return true;
     }
@@ -868,6 +868,7 @@ function FlatpickrInstance(
     return undefined;
   }
 
+  const timerRef = "updateMsgContainer";
   function updateMessageContainer(message: string) {
     if (!self.messageContainer) {
       return;
@@ -876,15 +877,14 @@ function FlatpickrInstance(
     if (message) {
       self.messageContainer.innerHTML = message;
       self.messageContainer.classList.add("show");
-      setTimeout(() => {
-        if (self.messageContainer) updateMessageContainer("");
-      }, 3000);
-
-      return;
+      startTimer(
+        timerRef,
+        () => {
+          if (self.messageContainer) closeMessageContainer();
+        },
+        6000
+      );
     }
-
-    self.messageContainer.addEventListener("transitionend", messageEndHandler);
-    self.messageContainer.classList.remove("show");
   }
 
   function messageEndHandler() {
@@ -895,6 +895,16 @@ function FlatpickrInstance(
       "transitionend",
       messageEndHandler
     );
+  }
+
+  function closeMessageContainer() {
+    if (!self.messageContainer) {
+      return;
+    }
+
+    stopTimer(timerRef);
+    self.messageContainer.addEventListener("transitionend", messageEndHandler);
+    self.messageContainer.classList.remove("show");
   }
 
   function focusOnDay(current: DayElement | undefined, offset: number) {
@@ -912,7 +922,6 @@ function FlatpickrInstance(
 
     if (startElem === undefined) {
       self.monthsDropdownContainer.focus();
-      //self._input.focus();
     } else if (!dayFocused) {
       focusOnDayElem(startElem);
     } else {
@@ -974,8 +983,6 @@ function FlatpickrInstance(
       );
     }
 
-    //updateNavigationCurrentMonth();
-
     const dayContainer = createElement<HTMLDivElement>("div", "dayContainer");
     dayContainer.setAttribute("role", "row");
     dayContainer.appendChild(days);
@@ -1032,8 +1039,6 @@ function FlatpickrInstance(
         month > self.config.maxDate.getMonth()
       );
     };
-
-    self.monthsDropdownContainer.tabIndex = 0;
 
     self.monthsDropdownContainer.innerHTML = "";
 
@@ -1397,20 +1402,22 @@ function FlatpickrInstance(
     delta: number,
     yearDelta = 0
   ) {
-    if (month + delta > 11) {
+    let monthDelta = delta > 0 ? 1 : -1;
+
+    if (month + monthDelta > 11) {
       return {
-        month: 1,
-        year: year + delta,
+        month: 0,
+        year: year + monthDelta,
       };
-    } else if (month + delta < 0) {
+    } else if (month + monthDelta < 0) {
       return {
         month: 11,
-        year: year + delta,
+        year: year + monthDelta,
       };
     }
 
     return {
-      month: month + delta,
+      month: month + monthDelta,
       year: year + yearDelta,
     };
   }
@@ -1958,11 +1965,22 @@ function FlatpickrInstance(
 
       for (let i = 0; i < dayList.length; i++) {
         const el = dayList[i];
-        if (el.getAttribute("aria-disabled") === "false") {
-          firstAvailableEl = el;
-        }
+
         if (el === current) {
           return current;
+        }
+
+        if (el.classList.contains("today")) {
+          firstAvailableEl = el;
+        }
+
+        if (
+          !firstAvailableEl &&
+          el.getAttribute("aria-disabled") === "false" &&
+          !el.classList.contains("prevMonthDay") &&
+          !el.classList.contains("nextMonthDay")
+        ) {
+          firstAvailableEl = el;
         }
       }
 
