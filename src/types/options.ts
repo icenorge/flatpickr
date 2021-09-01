@@ -346,6 +346,7 @@ export interface ParsedOptions {
   stopNoMoreDates: boolean;
   noMoreDatesText: string;
   showYearSelector: boolean;
+  openOnFocus: boolean;
 }
 
 export const defaults: ParsedOptions = {
@@ -434,4 +435,5 @@ export const defaults: ParsedOptions = {
   stopNoMoreDates: false,
   noMoreDatesText: "No available dates in {m} {y}",
   showYearSelector: true,
+  openOnFocus: true,
 };
