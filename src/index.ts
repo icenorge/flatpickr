@@ -1059,7 +1059,6 @@ function FlatpickrInstance(
         self.config.shorthandCurrentMonth,
         self.l10n
       );
-      month.tabIndex = -1;
 
       if (self.currentMonth === i) {
         month.selected = true;
@@ -1180,6 +1179,9 @@ function FlatpickrInstance(
 
   function buildMonthNav() {
     self.monthNav = createElement<HTMLDivElement>("div", "flatpickr-months");
+    self.monthNav.setAttribute("role", "region");
+    self.monthNav.setAttribute("aria-live", "polite");
+    self.monthNav.setAttribute("aria-atomic", "true");
     self.yearElements = [];
     self.monthElements = [];
 
@@ -1425,7 +1427,11 @@ function FlatpickrInstance(
     };
   }
 
-  function changeMonth(value: number, isOffset = true) {
+  function changeMonth(
+    value: number,
+    isOffset = true,
+    updateMonthLiveInfo?: boolean
+  ) {
     const delta = isOffset ? value : value - self.currentMonth;
 
     if (
@@ -1435,11 +1441,29 @@ function FlatpickrInstance(
       return;
 
     self.currentMonth += delta;
-
-    changeToCurrentMonth();
+    changeToCurrentMonth(updateMonthLiveInfo);
   }
 
-  function changeToCurrentMonth() {
+  function appendAriaLiveMessage() {
+    self.monthNav.setAttribute(
+      "aria-label",
+      `${monthToStr(
+        self.currentMonth,
+        self.config.shorthandCurrentMonth,
+        self.l10n
+      )} ${self.currentYear} vises`
+    );
+
+    startTimer(
+      "emptyAriaLiveElement",
+      () => {
+        self.monthNav.setAttribute("aria-label", "");
+      },
+      2000
+    );
+  }
+
+  function changeToCurrentMonth(updateMonthLiveInfo?: boolean) {
     if (self.currentMonth < 0 || self.currentMonth > 11) {
       self.currentYear += self.currentMonth > 11 ? 1 : -1;
       self.currentMonth = (self.currentMonth + 12) % 12;
@@ -1452,6 +1476,12 @@ function FlatpickrInstance(
 
     triggerEvent("onMonthChange");
     updateNavigationCurrentMonth();
+
+    //pass info here
+
+    if (updateMonthLiveInfo) {
+      appendAriaLiveMessage();
+    }
   }
 
   function clear(triggerChangeEvent = true, toInitial = true) {
@@ -1787,7 +1817,8 @@ function FlatpickrInstance(
     ) {
       onMonthNavClick(e);
     }
-    if (e.keyCode === 13 && eventTarget === self.monthsDropdownContainer) {
+    //e.keyCode === 13 &&
+    if (eventTarget === self.monthsDropdownContainer) {
       // when klikk on dropdown do default events.
     } else if (e.keyCode === 13 && isInput) {
       if (allowInput) {
@@ -3101,7 +3132,7 @@ function FlatpickrInstance(
     if (isPrevMonth || isNextMonth) {
       const delta = isPrevMonth ? -1 : 1;
       checkAvailableDays(() => {
-        changeMonth(delta);
+        changeMonth(delta, true, true);
       }, delta);
     } else if (
       self.yearElements.indexOf(eventTarget as HTMLInputElement) >= 0

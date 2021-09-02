@@ -152,9 +152,6 @@
       else
         border-top-color $calendarBackground
 
-  &:focus
-    outline 0
-
 .flatpickr-wrapper
   position relative
   display inline-block
@@ -296,7 +293,7 @@
       path
         fill alpha($monthForeground, 0.5)
 
-  &:hover, &:focus
+  &:hover
     background: alpha($invertedBg, 0.05)
 
     span
@@ -360,9 +357,6 @@
     -moz-appearance textfield
     appearance textfield
 
-    &:focus
-      outline #000 auto 1px
-
     &[disabled], &[disabled]:hover
       font-size 100%
       color alpha($monthForeground, 0.5)
@@ -392,15 +386,14 @@
     -moz-appearance: menulist
     width: auto
 
-    &:focus, &:active
-       outline: black auto 1px;
+    &:focus
+        outline: -webkit-focus-ring-color auto 1px;
 
     &:hover
       background: alpha($invertedBg, 0.05)
 
     .flatpickr-monthDropdown-month
       background-color: $monthBackground
-      //outline: none
       padding: 0
 
 .flatpickr-weekdays
@@ -440,9 +433,6 @@ span.flatpickr-weekday
   display flex
   align-items: flex-start;
   width $daysWidth
-
-  &:focus
-    outline 0
 
   if $noCalendarBorder is defined
     border-left 1px solid $calendarBorderColor
@@ -493,7 +483,7 @@ span.flatpickr-weekday
   text-align center
 
   &, &.prevMonthDay, &.nextMonthDay
-    &.inRange, &.today.inRange, &:hover //, &:focus
+    &.inRange, &.today.inRange, &:hover
       cursor pointer
       outline 0
       background $dayHoverBackground
@@ -503,7 +493,7 @@ span.flatpickr-weekday
   &.today
     border-color $todayColor
 
-    &:hover, &:focus
+    &:hover
       border-color $todayColor
       background $todayColor
       if $today_fg_color is defined
@@ -512,7 +502,7 @@ span.flatpickr-weekday
         color white
 
   &.selected, &.startRange, &.endRange
-    &, &.inRange, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
+    &, &.inRange, &:hover, &.prevMonthDay, &.nextMonthDay
       background $selectedDayBackground
       box-shadow none
 
@@ -684,10 +674,6 @@ span.flatpickr-weekday
     &.flatpickr-minute, &.flatpickr-second
       font-weight 400
 
-    &:focus
-      outline 0
-      border 0
-
   .flatpickr-time-separator, .flatpickr-am-pm
     height inherit
     float left
@@ -706,7 +692,7 @@ span.flatpickr-weekday
     font-weight 400
 
   input, .flatpickr-am-pm
-    &:hover, &:focus
+    &:hover
       background lighten($dayHoverBackground, 3)
 
 .flatpickr-input[readonly]
