@@ -152,15 +152,13 @@
       else
         border-top-color $calendarBackground
 
-  &:focus
-    outline 0
-
 .flatpickr-wrapper
   position relative
   display inline-block
 
 .flatpickr-months
   display flex
+  padding-top: .5rem;
 
   .flatpickr-month
     if $noCalendarBorder is defined
@@ -171,7 +169,6 @@
     height $monthNavHeight
     line-height 1
     text-align center
-    position relative
     user-select none
     overflow hidden
     flex 1
@@ -179,13 +176,15 @@
   .flatpickr-prev-month, .flatpickr-next-month
     text-decoration none
     cursor pointer
-    position absolute
-    top 0
-    height $monthNavHeight
-    padding 10px
+    //position absolute
+    //top 0
+    height 1.6rem
+    padding .35rem .625rem
     z-index 3
     color $monthForeground
     fill $monthForeground
+    border none
+    background-color: transparent
 
     &.flatpickr-disabled
       display none
@@ -253,7 +252,7 @@
     padding 0 4px 0 2px
     height 50%
     line-height 50%
-    opacity 0
+    opacity 0 
     cursor pointer
     border 1px solid alpha($dayForeground, 0.15)
     box-sizing border-box
@@ -300,7 +299,6 @@
     span
       opacity 1
 
-
 .flatpickr-current-month
   font-size 135%
   line-height inherit
@@ -309,7 +307,7 @@
   position absolute
   width 75%
   left 12.5%
-  padding (0.22*$monthNavHeight) 0 0 0
+  padding 0
   line-height 1
   height $monthNavHeight
   display inline-block
@@ -359,9 +357,6 @@
     -moz-appearance textfield
     appearance textfield
 
-    &:focus
-      outline 0
-
     &[disabled], &[disabled]:hover
       font-size 100%
       color alpha($monthForeground, 0.5)
@@ -391,15 +386,15 @@
     -moz-appearance: menulist
     width: auto
 
-    &:focus, &:active
-      outline: none
+    &:focus
+        outline: 1px auto Highlight;
+        //outline: 1px auto -webkit-focus-ring-color;
 
     &:hover
       background: alpha($invertedBg, 0.05)
 
     .flatpickr-monthDropdown-month
       background-color: $monthBackground
-      outline: none
       padding: 0
 
 .flatpickr-weekdays
@@ -439,9 +434,6 @@ span.flatpickr-weekday
   display flex
   align-items: flex-start;
   width $daysWidth
-
-  &:focus
-    outline 0
 
   if $noCalendarBorder is defined
     border-left 1px solid $calendarBorderColor
@@ -492,7 +484,7 @@ span.flatpickr-weekday
   text-align center
 
   &, &.prevMonthDay, &.nextMonthDay
-    &.inRange, &.today.inRange, &:hover, &:focus
+    &.inRange, &.today.inRange, &:hover
       cursor pointer
       outline 0
       background $dayHoverBackground
@@ -502,7 +494,7 @@ span.flatpickr-weekday
   &.today
     border-color $todayColor
 
-    &:hover, &:focus
+    &:hover
       border-color $todayColor
       background $todayColor
       if $today_fg_color is defined
@@ -511,7 +503,7 @@ span.flatpickr-weekday
         color white
 
   &.selected, &.startRange, &.endRange
-    &, &.inRange, &:focus, &:hover, &.prevMonthDay, &.nextMonthDay
+    &, &.inRange, &:hover, &.prevMonthDay, &.nextMonthDay
       background $selectedDayBackground
       box-shadow none
 
@@ -605,6 +597,15 @@ span.flatpickr-weekday
     border-bottom 1px solid $calendarBorderColor
 
 
+.flatpickr-messageContainer
+  max-height:0
+  opacity: 0
+  overflow: hidden;
+  transition: all 1s ease-in-out;
+  &.show
+    max-height: 5rem;
+    opacity: 1;
+
 .flatpickr-rContainer
   display inline-block
   padding 0
@@ -674,10 +675,6 @@ span.flatpickr-weekday
     &.flatpickr-minute, &.flatpickr-second
       font-weight 400
 
-    &:focus
-      outline 0
-      border 0
-
   .flatpickr-time-separator, .flatpickr-am-pm
     height inherit
     float left
@@ -696,7 +693,7 @@ span.flatpickr-weekday
     font-weight 400
 
   input, .flatpickr-am-pm
-    &:hover, &:focus
+    &:hover
       background lighten($dayHoverBackground, 3)
 
 .flatpickr-input[readonly]

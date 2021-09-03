@@ -18,6 +18,7 @@ export interface Elements {
   weekdayContainer: HTMLDivElement;
   calendarContainer: HTMLDivElement;
   innerContainer?: HTMLDivElement;
+  messageContainer?: HTMLDivElement;
   rContainer?: HTMLDivElement;
   daysContainer?: HTMLDivElement;
   days: HTMLDivElement;
@@ -87,7 +88,7 @@ export type Instance = Elements &
     changeMonth: (
       value: number,
       isOffset?: boolean,
-      fromKeyboard?: boolean
+      updateMonthLiveInfo?: boolean
     ) => void;
     changeYear: (year: number) => void;
     clear: (emitChangeEvent?: boolean, toInitial?: boolean) => void;
@@ -160,4 +161,4 @@ export interface FlatpickrFn {
   compareDates: (date1: Date, date2: Date, timeless?: boolean) => number;
 }
 
-export type DayElement = HTMLSpanElement & { dateObj: Date; $i: number };
+export type DayElement = HTMLButtonElement & { dateObj: Date; $i: number };
