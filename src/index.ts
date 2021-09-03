@@ -787,7 +787,7 @@ function FlatpickrInstance(
       monthDelta,
       yearDelta
     );
-    var month = monthToStr(
+    const month = monthToStr(
       nextMonth.month,
       self.config.shorthandCurrentMonth,
       self.l10n
@@ -3269,7 +3269,7 @@ if (
 }
 
 /* istanbul ignore next */
-var flatpickr = function (
+const flatpickr = function (
   selector: ArrayLike<Node> | Node | string,
   config?: Options
 ) {

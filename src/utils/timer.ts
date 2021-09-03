@@ -15,7 +15,7 @@ export function stopTimer(timerName: string) {
 
 export function startTimer(timerName: string, callback: () => any, ms: number) {
   stopTimer(timerName);
-  var timeout = setTimeout(() => {
+  const timeout = setTimeout(() => {
     callback();
   }, ms);
 
